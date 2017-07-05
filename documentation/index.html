@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    <meta charset="utf-8">
+	<title>PageRefresher</title>
+ 	<meta name="description" content="Описание принципов работы с расширением.">
+	<meta name="author" content="Vladislav Sereda">
+	<meta name="copyright" content="Vladislav Sereda">
+	<meta name="generator" content="Documenter v2.0 http://rxa.li/documenter">
+	<meta name="date" content="2017-03-22T00:00:00+01:00">
+	
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	
+    <link href="assets/css/bootstrap.css" rel="stylesheet">
+    <link href="assets/js/google-code-prettify/prettify.css" rel="stylesheet">
+    <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="assets/css/documenter_style.css" rel="stylesheet">
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    
+	
+	<style>
+		html, body{background-color:#EEEEEE;color:#383838;}
+		h1,h2,h3,h4,h5,h6{color:#383838;}
+		section table{background-color:#EEEEEE;}
+		::-moz-selection{background:#333636;color:#00DFFC;}
+		::selection{background:#333636;color:#00DFFC;}
+		a.brand{background-image:url();}
+		a, a:hover, a:active{color:#008C9E;}
+		hr{border-top:1px solid #D4D4D4;border-bottom:1px solid #FFFFFF;}
+		div.navbar-inner, .navbar .nav li ul{background:#343838;color:#FFFFFF;}
+		a.btn-navbar{background:#343838;color:#FFFFFF;}
+		.navbar .nav li a{color:#FFFFFF;text-shadow:1px 1px 0px #494F4F;}
+		.navbar .nav li a:hover, .navbar .nav li.active a{text-shadow:none;}
+		div.navbar-inner ul{}
+		.marketing-byline{color:#FFFFFF;}
+		.navbar .nav > li a{color:#FFFFFF;}
+		.navbar .nav > li a:hover, a.btn-navbar:hover{background:#333636;color:#00DFFC;}
+		.navbar .nav .active > a, .navbar .nav .active > a:hover, a.btn-navbar:active{background-color:#333636;color:#00DFFC;}
+		.navbar .nav li ul li a:hover{background:#333636;color:#00DFFC;}
+		.navbar .nav li ul li a:active{background:#333636;color:#00DFFC;}
+		.btn-primary {
+			  background-image: -moz-linear-gradient(top, #008C9E, #006673);
+			  background-image: -ms-linear-gradient(top, #008C9E, #006673);
+			  background-image: -webkit-gradient(linear, 0 0, 0 008C9E%, from(#343838), to(#006673));
+			  background-image: -webkit-linear-gradient(top, #008C9E, #006673);
+			  background-image: -o-linear-gradient(top, #008C9E, #006673);
+			  background-image: linear-gradient(top, #008C9E, #006673);
+			  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#008C9E', endColorstr='#006673', GradientType=0);
+			  border-color: #006673 #006673 #bfbfbf;
+			  color:#FFFFFF;
+		}
+		.btn-primary:hover,
+		.btn-primary:active,
+		.btn-primary.active,
+		.btn-primary.disabled,
+		.btn-primary[disabled] {
+		  background-color: #006673;
+		}
+		#documenter_copyright{display:block !important;visibility:visible !important;}
+	</style>
+	
+	
+	
+    </head>
+    
+<body class="documenter-project-pagerefresher" data-spy="scroll" id="top">
+
+<!-- Documentation Navbar -->
+
+<div class="navbar navbar-fixed-top">
+	<div class="navbar-inner">
+		<div class="container"> 
+			<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </a> 
+			<a class="brand" href="#">PageRefresher</a>
+			<div class="nav-collapse">
+			<ul class="nav">
+					
+			<li><a href="#refresher" title="Refresher">Refresher</a></li>
+			<li><a href="#bumper" title="Bumper">Bumper</a></li>
+			<li><a href="#settings" title="Settings">Settings</a></li>
+
+			</ul>
+			</div>
+		</div>
+	</div>
+</div> <!-- End of Navbar -->
+
+<!-- Main Container Beginning -->			
+			
+<div class="container" id="documenter_content">
+    
+	<div id="documenter-cover">
+	<div class="masthead">
+	    <h1>PageRefresher</h1>
+	    <p>Описание принципов работы с расширением.</p>
+	    <ul class="marketing-byline">
+			<li>created: 03/22/2017</li>
+			<li>latest update: 03/22/2017</li>
+			<li>by: Vladislav Sereda</li>
+			
+		</ul>
+	    <p class="download-info">
+			
+		</p>
+		
+	</div> <!-- masthead -->
+	
+   <div id="intro">
+    <p class="highlight hero-unit">Данное расширения дает возможность совершать циклически повторяющиеся действия, что связаны с работой браузера.
+На данный момент есть поддержка 2 действий:
+1) Перезагрузки / изменения URL страницы.
+2) Бампа(отправки трейдов) на сайте csgolounge.com</p>
+   </div> <!-- intro -->
+   
+	</div>
+      
+  <section id="refresher">
+	<div class="page-header"><h3>Refresher</h3><hr class="notop"></div>
+<p>
+	<strong>1) Секция Initial Time.</strong></p>
+<p>
+	Данная секция задает начальное время для запуска работи расширения.</p>
+<p>
+	За основу берется сегодняшняя дата.</p>
+<p>
+	В полях устанавливаются:</p>
+<p>
+	<strong>Hours -</strong> часы.</p>
+<p>
+	<strong>Minutes -&nbsp;</strong> минуты.</p>
+<p>
+	<strong>Seconds -&nbsp;</strong>секунды.</p>
+<p>
+	<strong>2) Секция Refresh Time</strong>.<br>
+	<br>
+	Данная секция задает частоту для перезагрузки страницы. &nbsp;</p>
+<p>
+	В полях устанавливаются:</p>
+<p>
+	<strong>Hours -</strong>&nbsp;часы.</p>
+<p>
+	<strong>Minutes -&nbsp;</strong>&nbsp;минуты.</p>
+<p>
+	<strong>Seconds -&nbsp;</strong>секунды.</p>
+<p>
+	<br>
+	3) Секция TargetURL.</p>
+<p>
+	Задает ссылку, для открытыя страницы, если перезагрузка происходит на :<br>
+	4, 9, 14, 19, 24, 29, 34, 39, 44, 49, 54, 59 минутах.</p>
+</section>
+<section id="bumper">
+	<div class="page-header"><h3>Bumper</h3><hr class="notop"></div>
+<p>
+	<strong>Работа бампера не отображаеться во всплывающем окне.</strong></p>
+<p>
+	<strong>Работу бампера необходимо настраивать через окно настроек.</strong></p>
+<p>
+	&nbsp; &nbsp;По умолчанию Бампер срабатывает каждый раз, начиная с <strong>Initial Time</strong>, указаного во всплывающем окне. Бампер повторяет свои действия каждие<strong> Refresh time</strong> секунд, что указываються во всплывающем окне.</p>
+<p>
+	&nbsp; &nbsp;Можно задать сдвиг для времени запуска бампера через окно настроек. Изменение Refresh time для бампера не предусмотрено.</p>
+</section>
+<section id="settings">
+	<div class="page-header"><h3>Settings</h3><hr class="notop"></div>
+<p>
+	Окно настроек, позволяет настроить детали работы расширения.</p>
+<p>
+	Состоит из следующих секций)</p>
+<p>
+	<strong>1) Общие настройки</strong></p>
+<p>
+	Флажок &quot;Разрешить автозапуск расширения&quot; позволяет расширению начинать свою работу автоматически, используя синхронизированые с профилем гугл настройки, на страницах, url которых указан у поле &quot;Набор страниц, где расширение будет запускаться автоматически&quot;.<br>
+	<br>
+	Поле&nbsp;&quot;Набор страниц, где расширение будет запускаться автоматически&quot; .&nbsp;<br>
+	Правила заполнения:<br>
+	1. Указываеться частично или полностью ссылка на страницу, где расширение планируеться запускать автоматически, например <strong>http://google.com/</strong> или <strong>csgolounge.</strong></p>
+<p>
+	2. Если необходимо указать несколько страниц, они указываються через запятую.</p>
+<p>
+	3. Во избежание ошибок не рекомендуется давать имена вида (№. #тутБылЯ, с).</p>
+<p>
+	4. <em>Все что не является пробельным символом либо запятой расцениваеться как URL адрес и будет использоваться для работы расширения.</em></p>
+<p>
+	<strong>2) Свойства рефрешера</strong></p>
+<p>
+	<b>Блок &quot;Установить задержку до перезагрузки&quot;.</b></p>
+<p>
+	<b>В</b>&nbsp;данном блоке указываеться время, на которое необходимо сдвинуть перезагрузку <strong>страницы назад во времени</strong>, относительно времени, что указывается во всплывающем окне.</p>
+<p>
+	То есть если время для начала работы во вспылвающем окне указано как 19:00:00, а в полях данного блока указано 0:1:0 , то время для начала рефреша сдивнется на 1 минуту назад и станет равно 18:59:00.</p>
+<p>
+	<em>Не рекомендуется указывать в полях отрицательные значения.</em><br>
+	<br>
+	<b>3) Свойства бампера</b></p>
+	<p>
+		<b>Блок &quot;Режим бампа сделок&quot;.</b></p>
+<p>
+	<p>Флажок устанавливет интервал между бампами в 10 секунд. Если он не установен, интервал - 0 секунд.</p>
+	<b>Блок &quot;Установить задержку до бампа&quot;.</b></p>
+<p>
+	<b>В</b>&nbsp;данном блоке указываеться время, на которое необходимо сдвинуть бамп трейдов на csgolounge&nbsp;<strong>&nbsp;назад во времени</strong>, относительно времени, что указывается во всплывающем окне.</p>
+<p>
+	Принцып работы идентичен блоку&nbsp;<b>&quot;Установить задержку до перезагрузки&quot;.</b></p>
+</section>
+
+
+
+    <hr />
+
+<footer>
+    <p>Copyright Vladislav Sereda 2017 made with the <a href="http://rxa.li/documenter">Documenter v2.0</a></p>
+</footer>
+
+</div><!-- /container --> 
+
+<!-- Le javascript
+    ================================================== --> 
+<!-- Placed at the end of the document so the pages load faster --> 
+<script>document.createElement('section');var duration='500',easing='swing';</script>
+<script src="assets/js/jquery.js"></script> 
+<script src="assets/js/jquery.scrollTo.js"></script>
+<script src="assets/js/jquery.easing.js"></script>
+<script src="assets/js/scripts.js"></script> 
+<script src="assets/js/google-code-prettify/prettify.js"></script> 
+<script src="assets/js/bootstrap-min.js"></script> 
+</body>
+</html>

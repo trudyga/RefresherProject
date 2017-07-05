@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name='viewport' content="width=device-width, initial-scale=1.0" />
+    <link href="../../bootstrap-3.3.7-dist/css/bootstrap.min.css"
+          type="text/css" rel="stylesheet"/>
+    <link href="styles/style.css" type='text/css' rel='stylesheet' />
+    <script src="../../node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="../../bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+
+    <script src="scripts/main.js"></script>
+</head>
+<body>
+<div class='container' style="width: 400px">
+    <div class="page-header">
+        <h1 style="display:inline-block">Page refresher</h1>
+        <button type='button' id="syncButton" class='btn pull-right' style="border-radius: 75%;"><img src="images/sync.svg" /></button>
+    </div>
+
+    <div class='row' id='initialTime'>
+        <h2 class='col-sm-12'>Initial time</h2>
+        <form class='form-inline'>
+            <div class='col-sm-4 col-xs-4 col-md-4 col-lg-4 form-group'>
+                <label for="initialTimeHours">Hours</label>
+                <input id="initialTimeHours" type='number' class='form-control hours' min='0' max='24'
+                       value='17'/>
+            </div>
+            <div class='col-sm-4 col-xs-4 col-md-4 col-lg-4 form-group'>
+                <label for="initialTimeMinutes">Minutes</label>
+                <input id="initialTimeMinutes" type='number' class='form-control minutes' min='0' max='60'
+                       value='30'/>
+            </div>
+            <div class='col-sm-4 col-xs-4 col-md-4 col-lg-4 form-group'>
+                <label for="initialTimeSeconds">Seconds</label>
+                <input id="initialTimeSeconds"type='number' class='form-control seconds' min='0' max='60'
+                       value='0'/>
+            </div>
+        </form>
+    </div>
+
+    <div class='row' id='refreshTime'>
+        <h2 class='col-sm-12'>Refresh time</h2>
+        <form class='form-inline'>
+            <div class='col-sm-4 col-xs-4 col-md-4 col-lg-4 form-group'>
+                <label for="refreshTimeHours">Hours</label>
+                <input id="refreshTimeHours" type='number' class='form-control hours' min='0' max='24'
+                       value='0'/>
+            </div>
+            <div class='col-sm-4 col-xs-4 col-md-4 col-lg-4 form-group'>
+                <label for="refreshTimeMinutes">Minutes</label>
+                <input id="refreshTimeMinutes" type='number' class='form-control minutes' min='0' max='60'
+                       value='17'/>
+            </div>
+            <div class='col-sm-4 col-xs-4 col-md-4 col-lg-4 form-group'>
+                <label for="refreshTimeSeconds">Seconds</label>
+                <input id="refreshTimeSeconds" type='number' class='form-control seconds' min='0' max='60'
+                       value='30'/>
+            </div>
+        </form>
+    </div>
+
+    <div class='row'>
+        <div class='col-sm-12 form-group'>
+            <h2>Target URL</h2>
+            <input id="targetURL" type='text' class='form-control' value="https://csgolounge.com/mytrades" />
+        </div>
+    </div>
+
+
+    <div class='row  vertical-align'>
+        <div id='nextReloadTime' class='col-sm-9 col-xs-9'/>
+        <span class='col-sm-3 col-xs-3 hours'></span>
+        <span class='col-sm-3 col-xs-3 minutes'></span>
+        <span class='col-sm-3 col-xs-3 seconds'></span>
+    </div>
+    <div class='col-sm-3 col-xs-3 pull-right'>
+        <button type='button' id='startButton' class='start'>Start</button>
+        <button type='button' id='stopButton' class='stop'  style="display: none">Stop</button>
+    </div>
+</div>
+</body>
+</html>

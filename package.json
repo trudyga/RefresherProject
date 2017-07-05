@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "amplifyjs": "^1.1.2-beta.2",
+    "jquery": "^3.1.1"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "sinon": "^1.17.7"
+  }
+}

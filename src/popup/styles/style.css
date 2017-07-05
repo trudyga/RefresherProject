@@ -1,0 +1,48 @@
+button.stop {
+  padding: 15px;
+  background-color: #df2020;
+  color: white;
+  box-shadow: 0px 3px 10px #993333;
+  border: 1px solid gray;
+}
+
+button.stop:hover {
+  box-shadow: 0px 4px 12px #df2020;
+}
+
+button.stop:active {
+  box-shadow: 0px 4px 4px #df2020;
+  color: black;
+}
+
+button.start {
+  padding: 15px;
+  background-color: #19b319;
+  color: white;
+  box-shadow: 0px 3px 10px #4d804d;
+  border: 1px solid gray;
+}
+
+button.start:hover {
+  box-shadow: 0px 4px 12px #19b319;
+}
+
+button.start:active {
+  box-shadow: 0px 4px 4px #19b319;
+  color: black;
+}
+
+button.start:disabled {
+  display: none;
+}
+
+.vertical-align {
+  display: flex;
+  align-items: center;
+}
+
+.sync {
+  border-radius: 75%;
+  width: 100px;
+  height: 82px;
+}

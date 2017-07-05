@@ -1,0 +1,5 @@
+#Gitingore for refresher extension
+.idea/
+bootstrap-3.3.7-dist/
+node_modules/
+documentation.zip

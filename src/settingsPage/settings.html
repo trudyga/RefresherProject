@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<head lang="en">
+    <title>Settings</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width = device-width, initial-scale= 1.0"/>
+    <meta name="description" content="The setting for Refresher extension">
+    <meta name="author" content="Sereda Vladislav">
+
+    <link href="../../bootstrap-3.3.7-dist/css/bootstrap.min.css"
+          type="text/css" rel="stylesheet"/>
+    <script src="../../node_modules/jquery/dist/jquery.min.js"></script>
+    <script src="../../bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+
+    <link href="styles/style.css" type="text/css" rel="stylesheet"/>
+    <script src="scripts/navTabsVertical.js"></script>
+    <script src="scripts/main.js"></script>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="page-header">
+        <h1>Настройки расширения</h1>
+    </div>
+    <div class="nav-tabs-vertical row">
+        <div class="col-lg-3 col-sm-3 col-xs-12">
+            <ul class="tabs">
+                <li>
+                    <button class="tab-btn selected" type="button" id="generalPropButton">Общие настройки</button>
+                </li>
+                <li>
+                    <button class="tab-btn" type="button" id='refresherPropButton'>Свойства реферешера</button>
+                </li>
+                <li>
+                    <button class="tab-btn" type="button" id='bumperPropButton'>Свойства трейд бампера</button>
+                </li>
+            </ul>
+        </div>
+
+        <div class="tabs-content col-lg-9 col-sm-9 col-xs-12">
+            <div class="tab-content">
+                <form id='generalProp'>
+                    <div class="form-group">
+                        <div class="checkbox col-lg-12">
+                            <input type="checkbox" id="autoload" value="autoload-checkbox"/>
+                            <label for="autoload">Разрешить автозапуск расширения</label>
+                        </div>
+                        <div class="autoload-info col-lg-12">
+                            <label for="urlList" style="display: block;">Набор url страниц, где расширение будет загружаться автоматически</label>
+                            <input type="text" id="urlList" value="" class="col-lg-12"/>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="tab-content">
+                <form id="refresherProp">
+                    <h3>Установить задержку до перезагрузки</h3>
+                    <div class='col-sm-4 col-xs-4 col-md-4 col-lg-4 form-group'>
+                        <label for="refresherDelayHours">Часы</label>
+                        <input id="refresherDelayHours" type='number' class='form-control hours' min='0' max='24'
+                               value='0'/>
+                    </div>
+                    <div class='col-sm-4 col-xs-4 col-md-4 col-lg-4 form-group'>
+                        <label for="refresherDelayMinutes">Минтуы</label>
+                        <input id="refresherDelayMinutes" type='number' class='form-control minutes' min='0' max='60'
+                               value='17'/>
+                    </div>
+                    <div class='col-sm-4 col-xs-4 col-md-4 col-lg-4 form-group'>
+                        <label for="refresherDelaySeconds">Секунды</label>
+                        <input id="refresherDelaySeconds" type='number' class='form-control seconds' min='0' max='60'
+                               value='30'/>
+                    </div>
+                </form>
+            </div>
+
+            <div class="tab-content">
+                <form id="bumperProp">
+                    <h3>Режим бампа сделок.</h3>
+                    <div class="form-group">
+                        <div class='col-sm-12 col-xs-12 col-lg-12 col-md-12 form-group'>
+                            <input type="checkbox" id="bumperInterval" value="bumpInterval-checkbox">
+                            <label for="bumperInterval">Бамп сделок с интервалом в 10 секунд</label>
+                        </div>
+                    </div>
+
+                    <h3>Установить задержку до бампа</h3>
+                    <div class="form-group">
+                        <div class='col-sm-4 col-xs-4 col-md-4 col-lg-4 form-group'>
+                            <label for="bumperDelayHours">Часы</label>
+                            <input id="bumperDelayHours" type='number' class='form-control hours' min='0' max='24'
+                                   value='0'/>
+                        </div>
+                        <div class='col-sm-4 col-xs-4 col-md-4 col-lg-4 form-group'>
+                            <label for="bumperDelayMinutes">Минуты</label>
+                            <input id="bumperDelayMinutes" type='number' class='form-control minutes' min='0' max='60'
+                                   value='17'/>
+                        </div>
+                        <div class='col-sm-4 col-xs-4 col-md-4 col-lg-4 form-group'>
+                            <label for="bumperDelaySeconds">Секунди</label>
+                            <input id="bumperDelaySeconds" type='number' class='form-control seconds' min='0' max='60'
+                                   value='30'/>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="row footer">
+        <div class="col-sm-12 col-lg-12">
+            <button class="col-xs-4 col-sm-4 col-lg-2" id="cancelButton">Отменить</button>
+            <button class="col-xs-4 col-sm-4 col-lg-2 pull-right" id="saveButton">Сохранить</button>
+        </div>
+    </div>
+
+    <div id="savedMessage" style="display:none; opacity: 0; position:fixed; left: 50%; top: 50%">
+        <div class="alert alert-success">
+            <strong>Saved!</strong>
+        </div>
+    </div>
+</div>
+</body>
