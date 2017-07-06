@@ -1,6 +1,7 @@
 /**
  * Created by Середа on 17.03.2017.
  */
+import * as $ from 'jquery';
 
 chrome.runtime.onMessage.addListener(function (request, sender, response) {
     if (request.cmd == 'bump') {

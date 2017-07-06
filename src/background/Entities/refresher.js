@@ -1,4 +1,5 @@
 //let Sheduler = require('core/sheduler.js');
+import Sheduler from './core/sheduler';
 
 class Refresher extends Sheduler{
 
@@ -56,6 +57,6 @@ class Refresher extends Sheduler{
         super.stop();
     }
 }
-
+export default Refresher;
 
 //module.exports = Refresher;

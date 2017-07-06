@@ -1,5 +1,5 @@
 //let Cycle = require('./entities/cycle.js');
-
+import Cycle from './Entities/cycle';
 
 let cycleMap = (function () {
     let data = new Map();
@@ -64,4 +64,4 @@ let cycleMap = (function () {
     };
 })();
 
-//export default cycleMap;
+export default cycleMap;

@@ -4,6 +4,9 @@
 //let Refresher = require('./refresher.js');
 //let Bumper = require('./bumper.js');
 //let Cycle = require('./cycle.js');
+import Refresher from './refresher';
+import Bumper from './bumper';
+import Cycle from './cycle';
 
 
 class CycleBuilder{
@@ -52,3 +55,5 @@ class CycleBuilder{
         return this._cycle;
     }
 }
+
+export default CycleBuilder;

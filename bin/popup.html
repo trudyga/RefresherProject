@@ -3,19 +3,15 @@
 <head>
     <meta charset="utf-8" />
     <meta name='viewport' content="width=device-width, initial-scale=1.0" />
-    <link href="../../bootstrap-3.3.7-dist/css/bootstrap.min.css"
-          type="text/css" rel="stylesheet"/>
-    <link href="styles/style.css" type='text/css' rel='stylesheet' />
-    <script src="../../node_modules/jquery/dist/jquery.min.js"></script>
-    <script src="../../bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
-
-    <script src="scripts/main.js"></script>
+    <script
+            src="https://code.jquery.com/jquery-3.2.1.js"></script>
+    <script src="assets/popup.bundle.js"></script>
 </head>
 <body>
 <div class='container' style="width: 400px">
     <div class="page-header">
         <h1 style="display:inline-block">Page refresher</h1>
-        <button type='button' id="syncButton" class='btn pull-right' style="border-radius: 75%;"><img src="images/sync.svg" /></button>
+        <button type='button' id="syncButton" class='btn pull-right' style="border-radius: 75%;"><img src="./assets/public/images/sync.svg" /></button>
     </div>
 
     <div class='row' id='initialTime'>
@@ -69,10 +65,11 @@
 
 
     <div class='row  vertical-align'>
-        <div id='nextReloadTime' class='col-sm-9 col-xs-9'/>
-        <span class='col-sm-3 col-xs-3 hours'></span>
-        <span class='col-sm-3 col-xs-3 minutes'></span>
-        <span class='col-sm-3 col-xs-3 seconds'></span>
+        <div id='nextReloadTime' class='col-sm-9 col-xs-9'>
+            <span class='col-sm-3 col-xs-3 hours'></span>
+            <span class='col-sm-3 col-xs-3 minutes'></span>
+            <span class='col-sm-3 col-xs-3 seconds'></span>
+        </div>
     </div>
     <div class='col-sm-3 col-xs-3 pull-right'>
         <button type='button' id='startButton' class='start'>Start</button>

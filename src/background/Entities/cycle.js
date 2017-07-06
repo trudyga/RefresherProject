@@ -1,7 +1,4 @@
-//let Refresher = require('./refresher.js');
-//let Bumper = require('./bumper.js');
-//let Sheduler = require('./core/sheduler.js');
-
+import Sheduler from './core/sheduler';
 
 class Cycle{
     constructor() {
@@ -50,3 +47,5 @@ class Cycle{
         }
     }
 }
+
+export default Cycle;

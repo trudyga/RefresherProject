@@ -1,6 +1,11 @@
 /**
  * Created by Середа on 18.03.2017.
  */
+import * as $ from 'jquery';
+import './navTabsVertical';
+import '../styles/style.css';
+import 'bootstrap/dist/js/bootstrap';
+import 'bootstrap/dist/css/bootstrap.css';
 
 $('document').ready(function () {
     messageModule.getSettingsData();
@@ -274,7 +279,7 @@ let messageModule = (function() {
         setSettingsData: function(data) {
             let promise = new Promise(function(resolve, reject) {
                 chrome.tabs.query({active: true, currentWindow: true}, (tabs) => {
-                    chrome.runtime.sendMessage({
+                      chrome.runtime.sendMessage({
                         'cmd': 'setSettingsData',
                         'tabId': null,
                         'data': data

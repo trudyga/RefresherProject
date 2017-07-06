@@ -1,3 +1,10 @@
+import * as $ from 'jquery';
+import '../styles/style.css';
+import '../images/gear.svg';
+import '../images/sync.svg';
+import 'bootstrap/dist/js/bootstrap';
+import 'bootstrap/dist/css/bootstrap.css';
+
 $('document').ready(function() {
     executionModule.initComponents();
 

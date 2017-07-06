@@ -1,9 +1,10 @@
 /**
  * Created by Середа on 17.03.2017.
  */
-//import cycleMap from "./cycleMap";
-//import Refresher from "./Entities/refresher";
-//import Bumper from "./Entities/bumper";
+import Refresher from "./Entities/refresher";
+import Bumper from "./Entities/bumper";
+import cycleMap from './cycleMap';
+import CycleBuilder from './Entities/cycleBuilder';
 
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
@@ -221,8 +222,8 @@ function formUpDate(milliseconds) {
  * @return {date} shifted date
  */
 function shiftDate(date, shift) {
-    let initDate = this.formUpDate(date);
-    let shiftDate = this.formUpDate(shift);
+    let initDate = formUpDate(date);
+    let shiftDate = formUpDate(shift);
 
     console.log("Date was:" + initDate.toString());
     console.log("Shift: " + shiftDate.toString());

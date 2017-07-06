@@ -1,36 +1,37 @@
 {
   "manifest_version": 2,
   "name": "Page refresher",
-  "version" : "2.2.1",
+  "version" : "2.3.0",
   "author": "Sereda Vladislav",
 
   "icons": {
-    "128": "src/icons/refreshIcon.png"
+    "128": "refreshIcon.png"
   },
 
   "content_scripts" : [
     {
       "matches": ["*://*/*"],
-      "js": ["src/content/content.js", "node_modules/jquery/dist/jquery.js"],
+      "js": ["./assets/content.bundle.js"],
       "run_at": "document_end"
     }
   ],
-
+  "content_security_policy": "script-src 'self' https://code.jquery.com; object-src 'self'",
   "background" : {
-    "page": "src/background/background.html"
+    "page": "background.html"
   },
 
-  "options_page" : "src/settingsPage/settings.html",
+  "options_page" : "settings.html",
 
   "browser_action": {
     "default_icon": {
-      "32": "src/icons/refreshIcon.png"
+      "32": "refreshIcon.png"
     },
     "default_title": "Refresh page",
-    "default_popup": "src/popup/popup.html"
+    "default_popup": "popup.html"
   },
 
   "permissions": [
+    "https://code.jquery.com/*",
     "tabs",
     "storage",
     "*://*/*",

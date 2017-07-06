@@ -194,3 +194,4 @@ let eventMixin = {
 };
 
 //module.exports = Sheduler;
+export default Sheduler;

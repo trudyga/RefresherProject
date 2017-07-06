@@ -1,5 +1,6 @@
 //let Sheduler = require('core/sheduler.js');
 //let sendModule = require('../communication/core.js');
+import Sheduler from './core/sheduler';
 
 class Bumper extends Sheduler{
     /**
@@ -42,6 +43,7 @@ class Bumper extends Sheduler{
     }
 }
 
+export default Bumper;
 
 
 //module.exports = Bumper;
