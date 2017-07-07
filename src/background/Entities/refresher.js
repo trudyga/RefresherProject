@@ -1,5 +1,6 @@
 //let Sheduler = require('core/sheduler.js');
 import Sheduler from './core/sheduler';
+import browser from 'extension-api-compilation';
 
 class Refresher extends Sheduler{
 
@@ -32,12 +33,12 @@ class Refresher extends Sheduler{
             for (let min of secondaryTimesList) {
                 if (min == curTime.getMinutes()) {
                     console.log("Send change tab message 4 9 14 19");
-                    chrome.tabs.update(id, {url: url});
+                    browser.tabs.update(id, url);
                     return;
                 }
             }
 
-            chrome.tabs.executeScript(id, {code: "location.reload();"});
+            browser.tabs.executeScript(id, "location.reload();");
         });
     }
 

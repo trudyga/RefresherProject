@@ -5,9 +5,10 @@ import Refresher from "./Entities/refresher";
 import Bumper from "./Entities/bumper";
 import cycleMap from './cycleMap';
 import CycleBuilder from './Entities/cycleBuilder';
+import browser from 'extension-api-compilation';
 
 
-chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
+browser.runtime.addListener(function(request, sender, sendResponse) {
     if (request.cmd == 'getPopupData') {
         console.log("get popup data request");
         console.dir(request);
@@ -41,17 +42,18 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     }
 });
 
-chrome.runtime.onMessage.addListener(function (request, sender, response) {
+browser.runtime.addListener(function (request, sender, response) {
    if (request.cmd == 'setPopupData') {
        if (request.tabId == null) {
            syncStorage.setPopupData(request.data);
            response("Popup data set successfully");
+           console.dir(request.data);
        }
        response("Popup data set failed");
    }
 });
 
-chrome.runtime.onMessage.addListener(function (request, sender, response) {
+browser.runtime.addListener(function (request, sender, response) {
     if (request.cmd == 'start') {
         let popupInfo = request.data;
         let tabId = request.tabId;
@@ -87,7 +89,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, response) {
     }
 });
 
-chrome.runtime.onMessage.addListener(function (request, sender, response) {
+browser.runtime.addListener(function (request, sender, response) {
    if (request.cmd == 'startWithDefault') {
        console.log('Recieved start with default message from tab' + sender.tab.id);
        console.log("Cycler object for this window!");
@@ -154,7 +156,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, response) {
    }
 });
 
-chrome.runtime.onMessage.addListener(function (request, sender, response) {
+browser.runtime.addListener(function (request, sender, response) {
    if (request.cmd == 'stop') {
        let tabId = request.tabId;
 
@@ -163,7 +165,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, response) {
    }
 });
 
-chrome.runtime.onMessage.addListener(function (request, sender, response) {
+browser.runtime.addListener(function (request, sender, response) {
     if (request.cmd == 'setSettingsData') {
         if (request.tabId == null) {
             syncStorage.setSettingsData(request.data);
@@ -173,7 +175,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, response) {
     }
 });
 
-chrome.runtime.onMessage.addListener(function (request, sender, response) {
+browser.runtime.addListener(function (request, sender, response) {
     if (request.cmd == 'getSettingsData') {
         if (request.tabId == null) {
             syncStorage.getSettingsData().then((settingsData) => {
@@ -246,12 +248,12 @@ let syncStorage = (function() {
         let key = "data";
 
         // free previous extension data for current user
-        chrome.storage.sync.clear();
+        //browser.syncStorage.clear();
         // set new extension's data for current user
-        chrome.storage.sync.set({"key": data}, function() {
-            console.log('Data added successfuly to sync storage');
-            console.dir(data);
-        });
+        browser.syncStorage.set({"key": data}).then((response) => {
+          console.log('Data added successfuly to sync storage');
+          console.dir(data);
+        }).catch(e => console.error(e));
     }
 
     /**
@@ -260,12 +262,12 @@ let syncStorage = (function() {
      */
     function getUserPrefs() {
         return new Promise(function(resolve, rejected) {
-            chrome.storage.sync.get("key", function(data) {
-                console.log("Data resieved from sync storage");
-                console.dir(data.key);
-                resolve(data.key);
+            browser.syncStorage.get().then(data => {
+              console.log("Data resieved from sync storage");
+              console.dir(data.key);
+              resolve(data.key);
             });
-        });
+        }).catch(e => console.error(e));
     }
 
     return {
@@ -292,7 +294,7 @@ let syncStorage = (function() {
                 data.popupData = popupData;
 
                 storeUserPrefs(data);
-            });
+            }).catch(e => console.error(e));
         },
 
         setSettingsData: function(settingsData) {
@@ -314,7 +316,7 @@ let syncStorage = (function() {
          * @param {Object} popupData
          */
         sendPopupData: function (tabId, popupData) {
-            chrome.runtime.sendMessage({
+            browser.runtime.sendMessage({
                 'message': 'popupData',
                 'popupData': popupData,
                 'tabId': tabId
@@ -329,7 +331,7 @@ let syncStorage = (function() {
          * @param {Object} settingData
          */
         sendSettingsData: function (settingData) {
-            chrome.runtime.sendMessage({
+            browser.runtime.sendMessage({
                 'message': 'settingsData',
                 'settingsData': settingData
             }, function (response) {

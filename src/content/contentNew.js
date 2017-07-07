@@ -1,16 +1,8 @@
-// ==UserScript==
-// @name         Test it
-// @namespace    http://tampermonkey.net/
-// @version      0.4
-// @description  try to take over the world!
-// @author       You
-// @match        https://csgolounge.com/mytrades
-// @grant        none
-// ==/UserScript==
+import browser from 'extension-api-compilation';
 
 let Interval = 0;
 
-chrome.runtime.onMessage.addListener(function (request, sender, response) {
+browser.runtime.addListener(function (request, sender, response) {
     if (request.cmd == 'bump') {
         console.log("Bump interval: " + request.bumperInterval);
         bump();
@@ -19,7 +11,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, response) {
     }
 });
 
-chrome.runtime.sendMessage({
+browser.runtime.sendMessage({
     'cmd': 'startWithDefault',
     'href': window.location.href
 });

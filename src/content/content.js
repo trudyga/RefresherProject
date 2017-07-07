@@ -2,8 +2,9 @@
  * Created by Середа on 17.03.2017.
  */
 import * as $ from 'jquery';
+import browser from 'extension-api-compilation';
 
-chrome.runtime.onMessage.addListener(function (request, sender, response) {
+browser.runtime.addListener(function (request, sender, response) {
     if (request.cmd == 'bump') {
         console.log("Bump interval: " + request.bumperInterval);
         bump(request.bumperInterval);
@@ -11,7 +12,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, response) {
     }
 });
 
-chrome.runtime.sendMessage({
+browser.runtime.sendMessage({
     'cmd': 'startWithDefault',
     'href': window.location.href
 });

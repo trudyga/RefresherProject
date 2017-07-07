@@ -1,6 +1,7 @@
 //let Sheduler = require('core/sheduler.js');
 //let sendModule = require('../communication/core.js');
 import Sheduler from './core/sheduler';
+import browser from 'extension-api-compilation';
 
 class Bumper extends Sheduler{
     /**
@@ -18,11 +19,11 @@ class Bumper extends Sheduler{
         this._tabId = tabId;
         super.addActionHandler(function() {
             let id = tabId;
-            chrome.tabs.sendMessage(id,
-                {cmd: 'bump', targetURL: null, bumperInterval: bumperInterval},
-                function(response) {
-                    console.log(response);
-            });
+            browser.tabs.sendMessage(id, {
+              cmd: 'bump',
+              targetURL: null,
+              bumperInterval: bumperInterval
+            }).then(res => console.log(res));
         });
     }
 
