@@ -1,18 +1,11 @@
 {
   "manifest_version": 2,
   "name": "Page refresher",
-  "version" : "3.0.0",
+  "version" : "3.0.5",
   "author": "Sereda Vladislav",
 
   "icons": {
     "128": "refreshIcon.png"
-  },
-
-  "applications": {
-    "gecko": {
-      "id": "demo-runtime.connect-and-storage.local@example.com",
-      "strict_min_version": "48.0a1"
-    }
   },
 
   "content_scripts" : [
@@ -22,7 +15,7 @@
       "run_at": "document_end"
     }
   ],
-  "content_security_policy": "script-src 'self' https://code.jquery.com; object-src 'self'",
+  "content_security_policy": "script-src 'self' https://code.jquery.com https://csgolounge.com/*; object-src 'self'",
   "background" : {
     "page": "background.html"
   },
@@ -42,6 +35,8 @@
 
   "permissions": [
     "https://code.jquery.com/*",
+    "https://csgolounge.com/*",
+    "http://csgolounge.com/*",
     "tabs",
     "storage",
     "*://*/*",

@@ -1,12 +1,13 @@
+/**
+ * Created by Середа on 17.03.2017.
+ */
+import * as $ from 'jquery';
 import browser from 'extension-api-compilation';
-
-let Interval = 0;
 
 browser.runtime.addListener(function (request, sender, response) {
     if (request.cmd == 'bump') {
         console.log("Bump interval: " + request.bumperInterval);
-        bump();
-        Interval = request.bumperInterval;
+        bump(request.bumperInterval);
         response("Bump message recieved");
     }
 });
@@ -17,13 +18,26 @@ browser.runtime.sendMessage({
 });
 
 
-function bump() {
-    // don't change
+/**
+ * Function do trade bumps on the page
+ * @param {number} interval - interval between bumps in milliseconds
+ */
+function bump(interval) {
+    // ==UserScript==
+// @name         CSGO lounge bumper
+// @namespace    http://tampermonkey.net/
+// @version      0.1
+// @description  try to take over the world!
+// @author       You
+// @match        https://csgolounge.com/mytrades
+// @grant        none
+// ==/UserScript==
+
     function GetTradeItems() {
         var items = new Array();
         //$('article div[class="tradepoll"]').each(function(index, item) {
         $('article div[class="tradepoll"] .buttonright')
-            .each(function(index, item) {
+            .each(function (index, item) {
                 items.push($(item)
                     .parent()
                     .parent());
@@ -33,70 +47,67 @@ function bump() {
         return items;
     }
 
-    //don't change
     function SlowForEach(array, finishCallback, min, max) {
-        var timeOffset = 0.0;
-        Iterate(0, array, 0.0, min, max, finishCallback);
+        var timeOffset = 150.0;
+        Iterate(0, array, timeOffset, min, max, finishCallback);
     }
 
-    // changed !!!!!
     function Iterate(index, array, offset, offsetMin, offsetMax, finishCallback) {
         if (index >= array.length) {
             finishCallback();
             return;
         }
 
-        offset = Interval;
+        var data = {
+            index: index,
+            item: array[index],
+            collection: array
+        };
+        IterationCallback(data);
 
-        if (Interval == 0 || !Interval) {
-            var data = {
-                index: index,
-                item: array[index],
-                collection: array
-            };
-            IterationCallback(data);
-            Iterate(index + 1, array, offset, offsetMin, offsetMax, finishCallback);
-        }
-        else {
-            setTimeout(function() {
-                var data = {
-                    index: index,
-                    item: array[index],
-                    collection: array
-                };
-                IterationCallback(data);
-                Iterate(index + 1, array, offset, offsetMin, offsetMax, finishCallback);
-            }, offset);
-        }
+        Iterate(index + 1, array, offset, offsetMin, offsetMax, finishCallback);
     }
 
-    // don't change
+    /**
+     * ONLY HERE WE ACTYALLY BUMP !!!!!!!!!!!!!!!!!!!
+     * @param data
+     * @constructor
+     */
     function IterationCallback(data) {
         //data.collection[data.index].find('.buttonright').click();
         //var code = data.collection[data.index].find('.buttonright').attr('onclick');
         //eval(code);
         var tradeId = data.item.attr('id')
             .split('trade')[1];
-        $.post('ajax/bumpTrade.php', 'trade=' + tradeId);
+
+        // added here the time check
+        var curTime = new Date();
+        // if we need to control time
+        // if ((curTime.getMinutes() % 10) != 5 && (curTime.getMinutes() % 10) != 0) {
+        //
+        // }
+        $.post('ajax/bumpTrade.php', 'trade=' + tradeId)
+          .then(success => console.log(`Traded successfuly: ${success}`))
+          .catch(error => console.error("Error when posting trade message: " + error));
         data.item.find('.buttonright')
             .hide();
         if (typeof console !== 'undefined') {
             console.log('bumped ' + tradeId);
         }
     }
-    // don't change
+
     function BumpAllTrades() {
         SlowForEach(
             GetTradeItems(),
-            function() {
-                setTimeout(function() {
+            function () {
+                setTimeout(function () {
                     window.location.reload(true);
                 }, ((Math.random() * 2) + 30.2) * 1000 * 60);
                 //window.location.reload(true);
                 //setTimeout(BumpAllTrades, ((Math.random() * 40) + 31) * 1000 * 60);
             },
-            0,
-            0
+            1,
+            500
         );
     }
 

@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "extension-api-compilation": "^0.1.8",
+    "extension-api-compilation": "^0.2.1",
     "jquery": "^3.2.1"
   },
   "devDependencies": {
@@ -16,7 +16,7 @@
     "webpack": "^3.1.0"
   },
   "name": "refresherproject",
-  "version": "2.3.0",
+  "version": "3.0.5",
   "description": "Web browser extension for performing sheduled task.",
   "main": "index.js",
   "directories": {
