@@ -1,8 +1,9 @@
 import * as $ from 'jquery';
 import browser from 'extension-api-compilation';
 
+
 browser.runtime.addListener(function (request, sender, response) {
-    if (request.cmd == 'bump') {
+    if (request.cmd === 'bump') {
         console.log("Bump interval: " + request.bumperInterval);
         bump(request.bumperInterval);
         response("Bump message recieved");
@@ -11,7 +12,7 @@ browser.runtime.addListener(function (request, sender, response) {
 
 browser.runtime.sendMessage({
     'cmd': 'startWithDefault',
-    'href': window.location.href
+    'href': location.href
 });
 
 function bump(interval) {

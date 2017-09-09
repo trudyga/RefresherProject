@@ -1,45 +1,28 @@
 /**
  * Created by Середа on 17.03.2017.
  */
-import Refresher from "./Entities/refresher";
-import Bumper from "./Entities/bumper";
-import cycleMap from './cycleMap';
-import CycleBuilder from './Entities/cycleBuilder';
 import browser from 'extension-api-compilation';
 
+if (chrome)
+    var alarms = chrome.alarms;
 
-browser.runtime.addListener(function(request, sender, sendResponse) {
-    if (request.cmd == 'getPopupData') {
-        console.log("get popup data request");
-        console.dir(request);
-        //sendResponse("If you see this, i'm fucked!");
-        console.log('Tab id' + request.tabId);
-        console.dir(cycleMap.get(request.tabId));
-        if (!cycleMap.get(request.tabId)) {
-            syncStorage.getPopupData().then(popupData => {
-                syncStorage.sendPopupData(request.tabId, popupData);
-            });
-        }
-        else {
-            let cycle = cycleMap.get(request.tabId);
-            for (let part of cycle.getParts()) {
-                if (part instanceof Refresher) {
-                    let popupData = {
-                        'initialTime': part.initialTime.getHours()* 3600000 +
-                            part.initialTime.getMinutes() * 60000 + part.initialTime.getSeconds() * 1000,
-                        'refreshTime': part.refreshTime,
-                        'targetURL': part.targetURL,
-                        'state': part.state,
-                        'nextActionTime': part.timeToNextAction
-                    };
 
-                    console.log("Send popup data from existing refresher");
-                    console.dir(popupData);
-                    syncStorage.sendPopupData(request.tabId, popupData);
-                }
-            }
-        }
-    }
+browser.runtime.addListener(function (request, sender, sendResponse) {
+   if (request.cmd === 'getPopupData') {
+       alarms.get('refresher#'+request.tabId, alarm => {
+           if (!alarm)
+               syncStorage.getPopupData().then(popupData => {
+                   syncStorage.sendPopupData(request.tabId, popupData);
+               });
+           else {
+               syncStorage.getPopupData().then(popupData => {
+                   popupData.nextActionTime = alarm.scheduledTime;
+                   popupData.state = true;
+                   syncStorage.sendPopupData(request.tabId, popupData);
+               });
+           }
+       });
+   }
 });
 
 browser.runtime.addListener(function (request, sender, response) {
@@ -54,7 +37,7 @@ browser.runtime.addListener(function (request, sender, response) {
 });
 
 browser.runtime.addListener(function (request, sender, response) {
-    if (request.cmd == 'start') {
+    if (request.cmd === 'start') {
         let popupInfo = request.data;
         let tabId = request.tabId;
         let settings = syncStorage.getSettingsData();
@@ -62,108 +45,167 @@ browser.runtime.addListener(function (request, sender, response) {
         console.dir(request);
 
         settings.then((prefs) => {
-           let builder = new CycleBuilder();
-           // get delays from settings and shift the initial time, using them
-           let refInitialTime = shiftDate(popupInfo.initialTime, prefs.refresher.refresherDelay);
-           let bumpInitialTime = shiftDate(popupInfo.initialTime, prefs.bumper.bumperDelay);
-           let bumperInterval = prefs.bumper.bumperInterval ? 10000 : 0;
+            let refresher = {
+                name: "refresher",
+                initialTime: shiftDate(popupInfo.initialTime, prefs.refresher.refresherDelay), // as Date
+                interval: popupInfo.refreshTime, // in ms
+                duration: prefs.refresher.duration, // as Date
+                tabId: request.tabId, // as number
+                targetURL: popupInfo.targetURL // as string
+            };
 
-           try{
-               builder.setRefresher(refInitialTime, popupInfo.refreshTime, prefs.refresher.duration,
-                   request.tabId, popupInfo.targetURL);
-               builder.setBumper(bumpInitialTime, popupInfo.refreshTime, prefs.refresher.duration,
-                   request.tabId, bumperInterval);
-           }
-           catch (e) {
-               console.log("Can't create refresher, en error occupied");
-               response("Cycle start failed");
-               return;
-           }
+            let bumper = {
+                name: "bumper",
+                initialTime: shiftDate(popupInfo.initialTime, prefs.bumper.bumperDelay),
+                interval: popupInfo.refreshTime,
+                duration: prefs.refresher.duration,
+                tabId: request.tabId,
+                bumpInterval: prefs.bumper.bumperInterval ? 10000 : 0
+            };
 
-           let cycle = builder.getCycle();
-           console.log("New cycle");
-           console.dir(cycle);
-           cycleMap.add(cycle, request.tabId);
+            shiftTime(refresher.initialTime, refresher.interval);
+            shiftTime(bumper.initialTime, bumper.interval);
+
+            alarms.create(refresher.name+"#"+refresher.tabId, {
+                when: +refresher.initialTime,
+                periodInMinutes: refresher.interval / 60000
+            });
+
+            alarms.get(refresher.name + '#' + refresher.tabId, alarm => {
+                console.dir(alarm);
+            });
+
+            alarms.create(bumper.name+"#" + bumper.tabId, {
+                when: +bumper.initialTime,
+                periodInMinutes: refresher.interval / 60000
+            });
+
+            // subscribe
+            alarms.onAlarm.addListener(alarm => {
+                if (alarm.name === refresher.name + "#" + refresher.tabId)
+                    browser.tabs.executeScript(refresher.tabId, "location.reload();");
+                if (alarm.name === bumper.name + "#" + bumper.tabId)
+                    browser.tabs.sendMessage(bumper.tabId, {
+                        cmd: 'bump',
+                        targetURL: null,
+                        bumperInterval: bumper.bumpInterval
+                    }).then(res => console.log(res));
+            });
+
+            console.log(`Created refresher#{refresher.tabId} && bumper#{bumper.tabId}`);
         });
-        response("Cycle started successfuly!");
+    }
+
+});
+
+function shiftTime(initialTime, interval) {
+    while (+initialTime < Date.now()) {
+        initialTime.setMilliseconds(initialTime.getMilliseconds() + interval);
+    }
+    return initialTime;
+}
+
+browser.runtime.addListener(function (request, sender, response) {
+    if (request.cmd === 'startWithDefault') {
+        console.log("Start with default message");
+        let refresherName = `refresher#${sender.tab.id}`;
+        let bumperName = `refresher#${sender.tab.id}`;
+
+        let refresherPromise = new Promise((resolve, reject) => {
+            alarms.get(refresherName, (alarm) => {
+               resolve(alarm);
+            });
+        }).then(alarm => {
+            console.dir(alarm);
+            if (alarm)
+                return false;
+
+            return syncStorage.getData().then((data) => {
+                if (!data.settingsData.general.autoload){
+                    console.log("Start with default is not enabled!");
+                    return data;
+                }
+
+                // check if page match the pattern, specified in the settings
+                let match = false;
+                for (let pageURL of data.settingsData.general.autoloadPages) {
+                    let pagePattern = new RegExp(pageURL);
+                    if (pageURL !== ''
+                        && pageURL !== " "
+                        && request.href.search(pagePattern) >= 0) {
+                        match = true;
+                        break;
+                    }
+                }
+
+                if (!match)
+                    return false;
+
+                let popupInfo = data.popupData;
+                let prefs = data.settingsData;
+
+                let refresher = {
+                    name: "refresher",
+                    initialTime: shiftDate(popupInfo.initialTime, prefs.refresher.refresherDelay), // as Date
+                    interval: popupInfo.refreshTime, // in ms
+                    duration: prefs.refresher.duration, // as Date
+                    tabId: sender.tab.id, // as number
+                    targetURL: popupInfo.targetURL // as string
+                };
+
+                let bumper = {
+                    name: "bumper",
+                    initialTime: shiftDate(popupInfo.initialTime, prefs.bumper.bumperDelay),
+                    interval: popupInfo.refreshTime,
+                    duration: prefs.refresher.duration,
+                    tabId: sender.tab.id,
+                    bumpInterval: prefs.bumper.bumperInterval ? 10000 : 0
+                };
+
+                shiftTime(refresher.initialTime, refresher.interval);
+                shiftTime(bumper.initialTime, bumper.interval);
+
+                alarms.create(refresher.name+"#"+refresher.tabId, {
+                    when: +refresher.initialTime,
+                    periodInMinutes: refresher.interval / 60000
+                });
+
+                alarms.get(refresher.name + '#' + refresher.tabId, alarm => {
+                    console.dir(alarm);
+                });
+
+                alarms.create(bumper.name+"#" + bumper.tabId, {
+                    when: +bumper.initialTime,
+                    periodInMinutes: refresher.interval / 60000
+                });
+
+                // subscribe
+                alarms.onAlarm.addListener(alarm => {
+                    if (alarm.name === refresher.name + "#" + refresher.tabId)
+                        browser.tabs.executeScript(refresher.tabId, "location.reload();");
+                    if (alarm.name === bumper.name + "#" + bumper.tabId)
+                        browser.tabs.sendMessage(bumper.tabId, {
+                            cmd: 'bump',
+                            targetURL: null,
+                            bumperInterval: bumper.bumpInterval
+                        }).then(res => console.log(res));
+                });
+
+                return true;
+            });
+        });
     }
 });
 
 browser.runtime.addListener(function (request, sender, response) {
-   if (request.cmd == 'startWithDefault') {
-       console.log('Recieved start with default message from tab' + sender.tab.id);
-       console.log("Cycler object for this window!");
-       console.dir(cycleMap.get(sender.tab.id));
-
-       if (cycleMap.get(sender.tab.id)){
-           console.log('Cycle object already exist');
-           return;
-       }
-
-       syncStorage.getData().then((data) => {
-           if (!data.settingsData.general.autoload){
-               console.log("Start with default is not enabled!");
-               return data;
-           }
-
-
-           let state = false;
-           for (let pageURL of data.settingsData.general.autoloadPages) {
-               let pagePattern = new RegExp(pageURL);
-               if (pageURL != ''
-                   && pageURL != " "
-                   && request.href.search(pagePattern) >= 0) {
-                   state = true;
-                   break;
-               }
-           }
-
-           if (!state) {
-               console.log("The page is not match the settings pages patterns");
-               return data;
-           }
-
-           console.dir(data);
-
-           let popupInfo = data.popupData;
-           let prefs = data.settingsData;
-
-           let refInitialTime = shiftDate(popupInfo.initialTime, prefs.refresher.refresherDelay);
-           let bumpInitialTime = shiftDate(popupInfo.initialTime, prefs.bumper.bumperDelay);
-           let bumperInterval = prefs.bumper.bumperInterval ? 10000 : 0;
-           let builder = new CycleBuilder();
-
-           try{
-               builder.setRefresher(refInitialTime, popupInfo.refreshTime, prefs.refresher.duration,
-                   sender.tab.id, popupInfo.targetURL);
-               builder.setBumper(bumpInitialTime, popupInfo.refreshTime, prefs.refresher.duration,
-                   sender.tab.id, bumperInterval);
-           }
-           catch (e) {
-               console.log("Can't create refresher, en error occupied:" + e.message);
-               response("Cycle start failed");
-               return;
-           }
-
-           let cycle = builder.getCycle();
-           console.log("New cycle");
-           console.dir(cycle);
-           cycleMap.add(cycle, sender.tab.id);
-
-           response("Cycle started successfully!");
-           return data;
-       });
-   }
+    if (request.cmd === 'stop') {
+        let refId = 'refresher#'+request.tabId;
+        let bumpId = 'bumper#'+request.tabId;
+        alarms.clear(refId, wasCleared => console.log(refId + " cleared: " + wasCleared));
+        alarms.clear(bumpId, wasCleared => console.log(bumpId + " cleared: " + wasCleared));
+    }
 });
 
-browser.runtime.addListener(function (request, sender, response) {
-   if (request.cmd == 'stop') {
-       let tabId = request.tabId;
-
-       cycleMap.remove(tabId);
-       response("App stopped successfuly!");
-   }
-});
 
 browser.runtime.addListener(function (request, sender, response) {
     if (request.cmd == 'setSettingsData') {
@@ -187,12 +229,6 @@ browser.runtime.addListener(function (request, sender, response) {
     }
 });
 
-let timeModule = (function() {
-    return {
-
-    };
-});
-
 /**
  * Form up date, base on amount of milliseconds since 00:00
  *
@@ -200,7 +236,7 @@ let timeModule = (function() {
  * @return {date}
  */
 function formUpDate(milliseconds) {
-    if (typeof milliseconds != 'number')
+    if (typeof milliseconds !== 'number')
         throw new Error("Incompatible argument type, expect number.");
 
     let date = new Date();

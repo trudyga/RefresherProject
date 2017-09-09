@@ -158,6 +158,7 @@ let nextReloadTimeModule = (function() {
      */
     displayTime: function(reloadTime) {
       let time = new Date(reloadTime);
+      console.log("Time to next reload time %s", time.toISOString());
       let hours = time.getUTCHours() < 10 ?
         "0" + time.getUTCHours() : time.getUTCHours();
       let minutes = time.getUTCMinutes() < 10 ?
@@ -206,7 +207,7 @@ let executionModule = (function () {
         $("#startButton").hide();
         $("#stopButton").show();
         $("#nextReloadTime").css("color", "#cc3333");
-        nextReloadTimeModule.animateDisplaying(reloadTime);
+        nextReloadTimeModule.animateDisplaying(reloadTime - Date.now());
       }
       else{
         console.log("Stop status set");
@@ -327,7 +328,10 @@ let messageModule = (function () {
           browser.runtime.sendMessage({
             'cmd': 'getPopupData',
             'tabId': tabs[0].id,
-          }).then(res => console.log(res));
+          }).then(res => {
+            console.log(res);
+            return res;
+          });
         })
       });
     }
